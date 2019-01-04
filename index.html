@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Environment Dashboard</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/metro-bootstrap.min.css">
+        <link rel="stylesheet" href="css/fontawesome.css">
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <style>
+            body {
+                min-height: 100%;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                background-color: #A9A9A9;
+            }
+
+            a {
+                width: 100%;
+                cursor: default;
+            }
+
+            div {
+                cursor: default !important;
+            }
+
+            a:focus {
+                text-decoration: none;
+            }
+
+            h1 {
+                margin-top: 10px;
+                margin-bottom: 0px;
+            }
+
+            .vertical-center {
+                display: flex;
+                align-items: center;
+                width: 100% !important;
+            }
+
+            .container {
+                width: 100%;
+            }
+
+            .col {
+                padding: 0px;
+            }
+
+            .full {
+                width: 100% !important;
+            }
+        </style>
+        <script>
+            $(document).ready(function(){
+                setInterval(refresh, 5000);
+
+                $("#fullscreen").click(function(){
+                    toggleFullScreen();
+                });
+
+                function refresh() {
+                    $.getJSON('URL', function(data){
+                        data = data[0];
+                        $("#temperature").text(data.temperature + "℃");
+                        $("#humidity").text(data.humidity + "%");
+                        $("#light").text(data.light == 1 ? "On" : "Off");
+                        $("#time").text(data.time.replace("T", " ").replace("+08:00", ""));
+                        if (data.light == 1) {
+                            $("#light_block").removeClass("tile-pomegranate");
+                            $("#light_block").addClass("tile-orange");
+                        } else {
+                            $("#light_block").removeClass("tile-orange");
+                            $("#light_block").addClass("tile-pomegranate");
+                        }
+                    })
+                }
+
+                function toggleFullScreen() {
+                    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
+                        if (document.documentElement.requestFullscreen) {
+                            document.documentElement.requestFullscreen();
+                        } else if (document.documentElement.msRequestFullscreen) {
+                            document.documentElement.msRequestFullscreen();
+                        } else if (document.documentElement.mozRequestFullScreen) {
+                            document.documentElement.mozRequestFullScreen();
+                        } else if (document.documentElement.webkitRequestFullscreen) {
+                            document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+                        }
+                    } else {
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.msExitFullscreen) {
+                            document.msExitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            document.mozCancelFullScreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        }
+                    }
+                }
+
+                refresh();
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <div class="col-12 col-lg-6">
+                    <div class="thumbnail tile tile-wide tile-lime vertical-center full">
+                        <a href="#" class="fa-links" id="fullscreen">
+                            <i class="fa fa-3x fa-tachometer-alt"></i>
+                            <h1>Environment Dashboard</h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <div class="col-4 col-lg-2">
+                    <div class="thumbnail tile tile-medium tile-midnight-blue vertical-center">
+                        <a href="#" class="fa-links">
+                            <i class="fa fa-3x fa-thermometer-half"></i>
+                            <h1 id="temperature"></h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-4 col-lg-2">
+                    <div class="thumbnail tile tile-medium tile-peter-river vertical-center">
+                        <a href="#" class="fa-links">
+                            <i class="fa fa-3x fa-tint"></i>
+                            <h1 id="humidity"></h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-4 col-lg-2">
+                    <div class="thumbnail tile tile-medium vertical-center" id="light_block">
+                        <a href="#" class="fa-links">
+                            <i class="fa fa-3x fa-lightbulb"></i>
+                            <h1 id="light"></h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <div class="col-12 col-lg-6">
+                    <div class="thumbnail tile tile-wide tile-teal vertical-center full">
+                        <a href="#" class="fa-links">
+                            <i class="fa fa-3x fa-clock"></i>
+                            <h1 id="time"></h1>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+        </div>
+    </body>
+</html>
